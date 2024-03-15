@@ -15,7 +15,15 @@ export class CreateAccountDTO {
   lastName: string;
 }
 
-export class GetAccountDTO {
+export class GetAccountByIdDTO {
   @IsNotEmpty()
-  id: string;
+  accountId: string;
+}
+
+export class GetAccountDTO {
+  @IsEmail()
+  email: string;
+
+  @IsNotEmpty()
+  password: string;
 }

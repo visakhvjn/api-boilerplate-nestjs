@@ -1,6 +1,16 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
-import { CreateAccountDTO, GetAccountDTO } from './dto';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
+import { CreateAccountDTO, GetAccountByIdDTO } from './dto';
 import { AccountService } from './account.service';
+import { AccessGuard } from 'src/auth/guard';
+import { VerifyAccountInterceptor } from './interceptor';
 
 @Controller('accounts')
 export class AccountController {
@@ -11,8 +21,10 @@ export class AccountController {
     return this.accountService.createAccount(dto);
   }
 
-  @Get('/:id')
-  getAccount(@Param() dto: GetAccountDTO) {
-    return this.accountService.getAccount(dto);
+  @UseGuards(AccessGuard)
+  @UseInterceptors(VerifyAccountInterceptor)
+  @Get('/:accountId')
+  getAccount(@Param() dto: GetAccountByIdDTO) {
+    return this.accountService.getAccountById(dto);
   }
 }
